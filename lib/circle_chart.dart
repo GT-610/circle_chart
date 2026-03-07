@@ -1,7 +1,7 @@
 library circle_chart;
 
+import 'package:circle_chart/circle_painter.dart';
 import 'package:flutter/material.dart';
-import 'circle_painter.dart';
 
 /// This [CircleChart] chart widget kind of StatefulWidget widget that create animated
 /// circle chart.
@@ -56,7 +56,7 @@ class CircleChartState extends State<CircleChart>
           _fraction = _animation.value;
         });
       });
-      _controller.forward();
+    _controller.forward();
   }
 
   @override

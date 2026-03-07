@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
 
 /// A class that extends the [CustomPainter] to paint the requested circle
 /// First two define the  animated value and up value. Other ones for
@@ -38,12 +39,13 @@ class CirclePainter extends CustomPainter {
 
     _paint.color = progressColor ?? Colors.blue;
 
-    double lastPercent = lastProgressNumber / maxNumber;
-    double expectPercent = progressNumber / maxNumber;
-    double realtimePercent = fraction * (expectPercent - lastPercent) + lastPercent;
-    double progressRadians = realtimePercent * (2 * math.pi);
+    final double lastPercent = lastProgressNumber / maxNumber;
+    final double expectPercent = progressNumber / maxNumber;
+    final double realtimePercent =
+        fraction * (expectPercent - lastPercent) + lastPercent;
+    final double progressRadians = realtimePercent * (2 * math.pi);
 
-    double startAngle = -math.pi * 1.5;
+    final double startAngle = -math.pi * 1.5;
 
     canvas.drawArc(
         Offset.zero & size, startAngle, progressRadians, false, _paint);
