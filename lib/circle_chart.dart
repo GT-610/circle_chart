@@ -3,9 +3,6 @@ library circle_chart;
 import 'package:circle_chart/circle_painter.dart';
 import 'package:flutter/material.dart';
 
-/// This [CircleChart] chart widget kind of StatefulWidget widget that create animated
-/// circle chart.
-
 class CircleChart extends StatefulWidget {
   final double progressNumber;
   final int maxNumber;
@@ -15,9 +12,8 @@ class CircleChart extends StatefulWidget {
   final Color? progressColor;
   final Color? backgroundColor;
 
-  /// The [CirclePainter] constructor has two required parameters that are [progressNumber] and
-  /// [maxNumber]. Also have some default parameter and optional parameters.
   CircleChart({
+    Key? key,
     required this.progressNumber,
     required this.maxNumber,
     this.animationDuration = const Duration(seconds: 1),
@@ -25,24 +21,21 @@ class CircleChart extends StatefulWidget {
     this.progressColor,
     this.width = 128,
     this.height = 128,
-  }) {
-    assert(progressNumber > 0 && maxNumber > 0 && progressNumber < maxNumber);
-  }
+  })  : assert(maxNumber > 0, 'maxNumber must be greater than 0'),
+        assert(progressNumber >= 0 && progressNumber < maxNumber,
+            'progressNumber must be greater than or equal to 0 and less than maxNumber'),
+        super(key: key);
 
   @override
   State<StatefulWidget> createState() => CircleChartState();
 }
 
-/// This [CircleChartState] class k'nd of class that handle animation and state of [CircleChart] widget.
 class CircleChartState extends State<CircleChart>
     with SingleTickerProviderStateMixin {
-  late CirclePainter _painter;
   late Animation<double> _animation;
   late AnimationController _controller;
-  double _fraction = 0.0;
-  double _lastProgressNumber = 0.01;
+  double _lastProgressNumber = 0.0;
 
-  /// Animation controller and animation initialized in this method called [initState]
   @override
   void initState() {
     super.initState();
@@ -50,12 +43,7 @@ class CircleChartState extends State<CircleChart>
         AnimationController(duration: widget.animationDuration, vsync: this);
     _animation = Tween(begin: 0.0, end: 1.0)
         .chain(CurveTween(curve: Curves.fastEaseInToSlowEaseOut))
-        .animate(_controller)
-      ..addListener(() {
-        setState(() {
-          _fraction = _animation.value;
-        });
-      });
+        .animate(_controller);
     _controller.forward();
   }
 
@@ -75,19 +63,8 @@ class CircleChartState extends State<CircleChart>
     }
   }
 
-  MediaQueryData get media => MediaQuery.of(context);
-
   @override
   Widget build(BuildContext context) {
-    /// [CirclePainter] object created here for using as painter.
-    _painter = CirclePainter(
-      fraction: _fraction,
-      progressNumber: widget.progressNumber,
-      lastProgressNumber: _lastProgressNumber,
-      maxNumber: widget.maxNumber,
-      backgroundColor: widget.backgroundColor,
-      progressColor: widget.progressColor,
-    );
     return Container(
       alignment: Alignment.center,
       width: widget.width,
@@ -96,7 +73,16 @@ class CircleChartState extends State<CircleChart>
         aspectRatio: 1.0,
         child: AnimatedBuilder(
           animation: _controller,
-          builder: (_, __) => CustomPaint(painter: _painter),
+          builder: (_, __) => CustomPaint(
+            painter: CirclePainter(
+              fraction: _animation.value,
+              progressNumber: widget.progressNumber,
+              lastProgressNumber: _lastProgressNumber,
+              maxNumber: widget.maxNumber,
+              backgroundColor: widget.backgroundColor,
+              progressColor: widget.progressColor,
+            ),
+          ),
         ),
       ),
     );

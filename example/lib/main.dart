@@ -8,7 +8,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Circle chart Demo'),
+      home: const MyHomePage(title: 'Circle chart Demo'),
     );
   }
 }
@@ -40,11 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              child: CircleChart(progressNumber: 4, maxNumber: 10),
-            )
-          ],
+          children: <Widget>[CircleChart(progressNumber: 4, maxNumber: 10)],
         ),
       ),
     );
